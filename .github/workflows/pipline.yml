@@ -23,6 +23,12 @@ jobs:
         with:
           dotnet-version: '6.0.x'
 
+      - name: Install .NET Framework Developer Pack
+        run: |
+          wget -q https://dotnet.microsoft.com/download/dotnet-framework/thank-you/net472-developer-pack-linux-x64-installer
+          chmod +x net472-developer-pack-linux-x64-installer
+          sudo ./net472-developer-pack-linux-x64-installer
+
       - name: Restore dependencies
         run: dotnet restore
 
