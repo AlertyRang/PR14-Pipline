@@ -1,30 +1,28 @@
-name: Code Analysis
+name: Analyze code
 
 on:
   push:
     branches:
       - main
-      - master
   pull_request:
     branches:
       - main
-      - master
 
 jobs:
   build:
-    runs-on: windows-latest  # Изменяем на операционную систему Windows
+    runs-on: windows-latest
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
-
-      - name: Setup .NET Framework SDK
-        uses: actions/setup-dotnet@v1
+      - name: Set up .NET Framework SDK
+        uses: microsoft/setup-msbuild@v1
         with:
-          dotnet-version: '4.7.2'
+          dotnet-version: '4.8'
+
+      - name: Checkout code
+        uses: actions/checkout@v2
 
       - name: Restore dependencies
         run: nuget restore
 
-      - name: Analyze code
+      - name: Build and analyze code
         run: msbuild /p:Analyzers=**/*.dll
