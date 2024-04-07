@@ -1,0 +1,38 @@
+name: Code Analysis
+
+on:
+  push:
+    branches:
+      - main
+      - master
+  pull_request:
+    branches:
+      - main
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '6.0.x'
+
+      - name: Install .NET Framework Developer Pack
+        run: |
+          wget -q https://download.visualstudio.microsoft.com/download/pr/9f50cd75-342b-4f1b-af82-12de8bf1d8c4/a1532b250b2049fd2044ab0f00e2d0c5/dotnet-sdk-4.7.2-linux-x64.tar.gz
+          mkdir -p dotnet
+          tar -zxf dotnet-sdk-4.7.2-linux-x64.tar.gz -C dotnet
+          export DOTNET_ROOT=$PWD/dotnet
+          export PATH=$PATH:$DOTNET_ROOT
+
+      - name: Restore dependencies
+        run: dotnet restore
+
+      - name: Analyze code
+        run: dotnet build /p:Analyzers=**/*.dll
