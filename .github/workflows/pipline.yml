@@ -18,19 +18,13 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Setup .NET
+      - name: Setup .NET Framework SDK
         uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: '6.0.x'
-
-      - name: Install .NET Framework Developer Pack
-        run: |
-          wget -q https://dotnet.microsoft.com/download/dotnet-framework/thank-you/net472-developer-pack-linux-x64-installer
-          chmod +x net472-developer-pack-linux-x64-installer
-          sudo ./net472-developer-pack-linux-x64-installer
+          dotnet-version: '4.7.2'
 
       - name: Restore dependencies
-        run: dotnet restore
+        run: nuget restore
 
       - name: Analyze code
-        run: dotnet build /p:Analyzers=**/*.dll
+        run: msbuild /p:Analyzers=**/*.dll
