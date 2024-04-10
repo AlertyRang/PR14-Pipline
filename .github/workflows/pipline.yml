@@ -25,4 +25,7 @@ jobs:
         run: nuget restore
 
       - name: Build and analyze code
-        run: msbuild /p:Analyzers=**/*.dll
+        run: |
+          msbuild /p:Analyzers=**/*.dll
+          dotnet tool install --global StyleCop.Analyzers
+          dotnet msbuild /p:StyleCopEnabled=true /p:StyleCopTreatErrorsAsWarnings=true
